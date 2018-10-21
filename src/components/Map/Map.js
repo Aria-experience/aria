@@ -50,12 +50,34 @@ class AppMap extends Component {
             passive: true
         });
 
-        Play();
+        Play('hello test');
     }
 
     componentWillUnmount() {
         // Remove window resize event listener
         window.removeEventListener('resize', this.handleResize);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log(
+            'prev',
+            prevState.viewportPalette,
+            'curr',
+            this.state.viewportPalette
+        );
+        if (
+            prevState.viewportPalette &&
+            prevState.viewportPalette.DarkMuted !==
+                this.state.viewportPalette.DarkMuted
+        ) {
+            console.log('yay');
+            Play(this.state.viewportPalette.DarkMuted);
+        }
+        // if (prevState.viewportPalette !== this.state.viewportPalette) {
+        //     // user moved mouse
+        //     // state changed
+        //     console.log('something changed');
+        // }
     }
 
     // Handle resizing of window, with debouncer for performance
@@ -103,6 +125,7 @@ class AppMap extends Component {
         // Set initial map center
         this.setMapCenterXY();
 
+        // extracts color after moving map
         this.map.on('moveend', event => {
             this.extractColorsfromImage(event);
         });
@@ -231,7 +254,7 @@ class AppMap extends Component {
                 this.setState({viewportPalette: palette});
                 this.setMapVersion();
 
-                //console.log(palette);
+                console.log('PALETTE', palette);
             }
 
             // example usage:
