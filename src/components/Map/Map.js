@@ -18,7 +18,7 @@ import {getWidth, getTopLeft} from 'ol/extent';
 import {createDataLayerXYZUrl} from './utils';
 
 // Styles
-import {MapContainer} from './Map.styles';
+import {MapContainer, Swatch} from './Map.styles';
 
 // Map Component
 class AppMap extends Component {
@@ -26,7 +26,8 @@ class AppMap extends Component {
         super(props);
 
         this.state = {
-            radius: 10
+            radius: 10,
+            color: null
         };
 
         this.mousePosition = null;
@@ -59,10 +60,15 @@ class AppMap extends Component {
 
         // Add mouse listener
         this.map.on('pointermove', event => {
-            console.log('event', event);
+            //console.log('');
+            //console.log('pointermove event', event);
             this.mousePosition = event.pixel;
-            console.log('this.mousePosition', this.mousePosition);
+            //console.log('this.mousePosition', this.mousePosition);
             this.map.render();
+            //var xy = event.pixel;
+            //console.log('this.map', this.map);
+            //var pixelAtClick = canvasContext.getImageData(xy[0], xy[1], 1, 1).data;
+            //var red = pixeAtClick[0]; // green is [1] , blue is [2] , alpha is [4]
         });
     };
 
@@ -93,6 +99,37 @@ class AppMap extends Component {
         }
     };
 
+    getPixelValues = event => {
+        //console.log('');
+        //console.warn('getPixelValues');
+        //console.log('event', event);
+
+        const {
+            context: ctx,
+            frameState: {pixelRatio}
+        } = event;
+
+        if (this.mousePosition) {
+            const x = this.mousePosition[0] * pixelRatio;
+            const y = this.mousePosition[1] * pixelRatio;
+
+            const imageData = ctx.getImageData(x, y, 1, 1).data;
+
+            const color =
+                'rgb(' +
+                imageData[0] +
+                ',' +
+                imageData[1] +
+                ',' +
+                imageData[2] +
+                ')';
+
+            console.log('color', color);
+
+            this.setState({color: color});
+        }
+    };
+
     // Creates the data layer
     createDataLayerXYZ = () => {
         // TODO: remove these temporary layer configs and use dynamic url creation function instead
@@ -105,6 +142,7 @@ class AppMap extends Component {
 
         // Create Layer Source
         this.source = new XYZ({
+            crossOrigin: 'anonymous',
             url: testUrl
             //url: createDataLayerXYZUrl(product, date)
         });
@@ -116,18 +154,19 @@ class AppMap extends Component {
         });
 
         // Attach "compose" listeners
-        this.dataLayer.on('precompose', event =>
-            this.spyCompose('precompose', event)
-        );
-        this.dataLayer.on('postcompose', event =>
-            this.spyCompose('postcompose', event)
-        );
+        //this.dataLayer.on('precompose', event => this.spyCompose('precompose', event));
+        this.dataLayer.on('postcompose', this.getPixelValues);
+        //this.dataLayer.on('postcompose', event =>  this.spyCompose('postcompose', event));
 
         return this.dataLayer;
     };
 
     render() {
-        return <MapContainer id="map-container" />;
+        return (
+            <MapContainer id="map-container">
+                <Swatch color={this.state.color} />
+            </MapContainer>
+        );
     }
 }
 
