@@ -1,0 +1,24 @@
+  /*
+        var projection = getProjection('EPSG:3857');
+        var projectionExtent = projection.getExtent();
+        var size = getWidth(projectionExtent) / 256;
+        var resolutions = new Array(14);
+        var matrixIds = new Array(14);
+        for (var z = 0; z < 14; ++z) {
+            // generate resolutions and matrixIds arrays for this WMTS
+            resolutions[z] = size / Math.pow(2, z);
+            matrixIds[z] = z;
+        } */
+        /*
+        const dataLayer = new TileLayer({
+            source: new WMTS({
+                url: 'https://gibs.earthdata.nasa.gov/wmts/',
+                matrixSet: 'EPSG:3857',
+                tileGrid: new WMTSTileGrid({
+                    origin: getTopLeft(projectionExtent),
+                    resolutions: resolutions,
+                    matrixIds: matrixIds
+                })
+            })
+        }); */
+        //https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_Aerosol/default/2014-04-09/GoogleMapsCompatible_Level6/{level}/{row}/{col}.png

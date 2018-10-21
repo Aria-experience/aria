@@ -1,4 +1,5 @@
 import styled from 'react-emotion';
+
 export const MapContainer = styled.div`
     position: absolute;
     top: 0;
