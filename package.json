@@ -62,10 +62,13 @@
   },
   "dependencies": {
     "emotion": "^9.2.4",
+    "node-vibrant": "^3.0.0",
+    "ol": "^5.2.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-emotion": "^9.2.4",
-    "react-hot-loader": "^4.3.3"
+    "react-hot-loader": "^4.3.3",
+    "tone": "^0.12.80"
   }
 }
