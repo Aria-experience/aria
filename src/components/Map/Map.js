@@ -18,8 +18,10 @@ import {getWidth, getTopLeft} from 'ol/extent';
 // App
 import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
+
 // Styles
 import {MapContainer, Swatch} from './Map.styles';
+import LayerDropdown from '../LayerDropdownButton';
 
 // Map Component
 class AppMap extends Component {
@@ -281,6 +283,7 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
+                <LayerDropdown />
                 <Swatch color={colorCode} />
             </MapContainer>
         );
