@@ -53,70 +53,138 @@ const makeSynth = () => {
         },
         vibratoRate: 0.5,
         vibratoAmount: 0.1
-    });
+    }).toMaster();
 };
 
 let leftSynth = makeSynth();
 let rightSynth = makeSynth();
-let leftPanner = new Tone.Panner(-0.5);
-let rightPanner = new Tone.Panner(0.5);
-let equalizer = EQUALIZER_CENTER_FREQUENCIES.map(frequency => {
-    let filter = Tone.context.createBiquadFilter();
-    filter.type = 'peaking';
-    filter.frequency.value = frequency;
-    filter.Q.value = 4.31;
-    filter.gain.value = 0;
-    return filter;
-});
-let echo = new Tone.FeedbackDelay('16n', 0.2);
-let delay = Tone.context.createDelay(6.0);
-let delayFade = Tone.context.createGain();
+// let leftPanner = new Tone.Panner(-0.5);
+// let rightPanner = new Tone.Panner(0.5);
+// let equalizer = EQUALIZER_CENTER_FREQUENCIES.map(frequency => {
+//     let filter = Tone.context.createBiquadFilter();
+//     filter.type = 'peaking';
+//     filter.frequency.value = frequency;
+//     filter.Q.value = 4.31;
+//     filter.gain.value = 0;
+//     return filter;
+// });
+// let echo = new Tone.FeedbackDelay('16n', 0.2);
+// let delay = Tone.context.createDelay(6.0);
+// let delayFade = Tone.context.createGain();
 
-delay.delayTime.value = 6.0;
-delayFade.gain.value = 0.75;
+// delay.delayTime.value = 6.0;
+// delayFade.gain.value = 0.75;
 
-leftSynth.connect(leftPanner);
-rightSynth.connect(rightPanner);
-leftPanner.connect(equalizer[0]);
-rightPanner.connect(equalizer[0]);
-equalizer.forEach((equalizerBand, index) => {
-    if (index < equalizer.length - 1) {
-        equalizerBand.connect(equalizer[index + 1]);
-    } else {
-        equalizerBand.connect(echo);
+// leftSynth.connect(leftPanner);
+// rightSynth.connect(rightPanner);
+// leftPanner.connect(equalizer[0]);
+// rightPanner.connect(equalizer[0]);
+// equalizer.forEach((equalizerBand, index) => {
+//     if (index < equalizer.length - 1) {
+//         equalizerBand.connect(equalizer[index + 1]);
+//     } else {
+//         equalizerBand.connect(echo);
+//     }
+// });
+// echo.toMaster();
+// echo.connect(delay);
+// delay.connect(Tone.context.destination);
+// delay.connect(delayFade);
+// delayFade.connect(delay);
+
+// new Tone.Loop(time => {
+//     leftSynth.triggerAttackRelease('C5', '1:2', time);
+//     leftSynth.setNote('D5', '+0:2');
+
+//     leftSynth.triggerAttackRelease('E4', '0:2', '+6:0');
+
+//     leftSynth.triggerAttackRelease('G4', '0:2', '+11:2');
+
+//     leftSynth.triggerAttackRelease('E5', '2:0', '+19:0');
+//     leftSynth.setNote('G5', '+19:1:2');
+//     leftSynth.setNote('A5', '+19:3:0');
+//     leftSynth.setNote('G5', '+19:4:2');
+// }, '34m').start();
+
+// new Tone.Loop(time => {
+//     rightSynth.triggerAttackRelease('D4', '1:2', '+5:0');
+//     rightSynth.setNote('E4', '+6:0');
+
+//     rightSynth.triggerAttackRelease('B3', '1m', '+11:2:2');
+//     rightSynth.setNote('G3', '+12:0:2');
+
+//     rightSynth.triggerAttackRelease('G4', '0:2', '+23:2');
+// }, '37m').start();
+
+// const scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+const scale = {
+    0: 'C4',
+    25: 'D4',
+    50: 'E4',
+    75: 'F4',
+    100: 'G4',
+    150: 'A4',
+    200: 'B4',
+    255: 'C5'
+};
+
+const createRightSound = (r, g, b) => {
+    console.log('CREATE SOUND', r, g, b);
+
+    while (r && !scale[r]) {
+        r++;
     }
-});
-echo.toMaster();
-echo.connect(delay);
-delay.connect(Tone.context.destination);
-delay.connect(delayFade);
-delayFade.connect(delay);
+    while (g && !scale[g]) {
+        g++;
+    }
+    while (b && !scale[b]) {
+        b++;
+    }
 
-new Tone.Loop(time => {
-    leftSynth.triggerAttackRelease('C5', '1:2', time);
-    leftSynth.setNote('D5', '+0:2');
+    let noteR = scale[r];
+    let noteG = scale[g];
+    let noteB = scale[b];
 
-    leftSynth.triggerAttackRelease('E4', '0:2', '+6:0');
+    return new Tone.Loop(time => {
+        rightSynth.triggerAttackRelease(noteR, '1:2');
+        rightSynth.setNote('E4', '+6:0');
 
-    leftSynth.triggerAttackRelease('G4', '0:2', '+11:2');
+        rightSynth.triggerAttackRelease('B3', '1m', '+11:2:2');
+        rightSynth.setNote('G3', '+12:0:2');
 
-    leftSynth.triggerAttackRelease('E5', '2:0', '+19:0');
-    leftSynth.setNote('G5', '+19:1:2');
-    leftSynth.setNote('A5', '+19:3:0');
-    leftSynth.setNote('G5', '+19:4:2');
-}, '34m').start();
+        rightSynth.triggerAttackRelease('G4', '0:2', '+23:2');
+    }, '34m');
+};
 
-new Tone.Loop(time => {
-    rightSynth.triggerAttackRelease('D4', '1:2', '+5:0');
-    rightSynth.setNote('E4', '+6:0');
+const createLeftSound = (r, g, b) => {
+    while (r && !scale[r]) {
+        r++;
+    }
 
-    rightSynth.triggerAttackRelease('B3', '1m', '+11:2:2');
-    rightSynth.setNote('G3', '+12:0:2');
+    let noteR = scale[r];
 
-    rightSynth.triggerAttackRelease('G4', '0:2', '+23:2');
-}, '37m').start();
+    return new Tone.Loop(time => {
+        leftSynth.triggerAttackRelease(noteR, '1:2', time);
+        leftSynth.setNote('D5', '+0:2');
 
-const play = () => {
+        leftSynth.triggerAttackRelease('E4', '0:2', '+6:0');
+
+        leftSynth.triggerAttackRelease('G4', '0:2', '+11:2');
+
+        leftSynth.triggerAttackRelease('E5', '2:0', '+19:0');
+        leftSynth.setNote('G5', '+19:1:2');
+        leftSynth.setNote('A5', '+19:3:0');
+        leftSynth.setNote('G5', '+19:4:2');
+    }, '37m');
+};
+
+const play = color => {
+    console.log('play');
+    console.log(color);
+
+    // createSound(color.r, color.g, color.b).start();
+    createRightSound(color.r, color.g, color.b).start();
+    createLeftSound(color.r, color.g, color.b).start();
     Tone.Transport.start();
 };
 
