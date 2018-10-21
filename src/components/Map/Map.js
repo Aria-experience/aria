@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import * as Vibrant from 'node-vibrant';
 // Open Layers Imports
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -20,17 +20,21 @@ import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
 // Styles
 import {MapContainer, Swatch} from './Map.styles';
+import {version} from 'bluebird';
 
 // Map Component
 class AppMap extends Component {
     constructor(props) {
         super(props);
 
+        // initial state\\
         this.state = {
             radius: 10,
             color: null,
             centerPx: null,
-            centerColor: 'transparent'
+            centerColor: 'transparent',
+            viewportPalette: null,
+            version: 0
         };
 
         this.mousePosition = null;
@@ -99,20 +103,27 @@ class AppMap extends Component {
         // Set initial map center
         this.setMapCenterXY();
 
-        // Add mouse listener
-        this.map.on('pointermove', event => {
-            //console.log('');
-            //console.log('pointermove event', event);
-            this.mousePosition = event.pixel;
-            //console.log('this.mousePosition', this.mousePosition);
-            this.map.render();
-            //var xy = event.pixel;
-            //console.log('this.map', this.map);
-            //var pixelAtClick = canvasContext.getImageData(xy[0], xy[1], 1, 1).data;
-            //var red = pixeAtClick[0]; // green is [1] , blue is [2] , alpha is [4]
+        this.map.on('moveend', event => {
+            this.extractColorsfromImage(event);
         });
+        // Add mouse listener
+
+        // this.map.on('pointermove', event => {
+        //     //console.log('');
+        //     //console.log('pointermove event', event);
+        //     this.mousePosition = event.pixel;
+        //     //console.log('this.mousePosition', this.mousePosition);
+        //     this.map.render();
+        //     //var xy = event.pixel;
+        //     //console.log('this.map', this.map);
+        //     //var pixelAtClick = canvasContext.getImageData(xy[0], xy[1], 1, 1).data;
+        //     //var red = pixeAtClick[0]; // green is [1] , blue is [2] , alpha is [4]
+        // });
     };
 
+    setMapVersion = () => {
+        this.setState({version: +!this.state.version});
+    };
     // Get the center of the map in screen pixel coordinates ([x,y])
     setMapCenterXY = () => {
         // Get the x,y coordinates
@@ -198,6 +209,36 @@ class AppMap extends Component {
         this.setState({centerColor: color});
     };
 
+    //Extracts color palette
+    extractColorsfromImage = event => {
+        console.log('');
+        //console.log('extractColorsfromImage');
+        //console.log(event);
+        // console.log('ctx', ctx);
+        // const imageData = ctx.getImageData
+        // const image = new Image();
+        // image.src =canvas.toDataURL("image/png");
+        // Vibrant.from('path/to/image').getPalette((err, palette) => console.log(palette))
+
+        const ctx = document.querySelector('canvas');
+        //console.log(ctx);
+        const imageData = ctx.toDataURL('image/png');
+        //console.log(imageData);
+        Vibrant.from(imageData).getPalette((err, palette) => {
+            if (err) {
+                console.error(err);
+            } else {
+                this.setState({viewportPalette: palette});
+                this.setMapVersion();
+
+                //console.log(palette);
+            }
+
+            // example usage:
+            //palette.DarkMuted.getRgb();
+        });
+    };
+
     onDataLayerPrecompose = ({
         context: ctx,
         frameState: {pixelRatio},
@@ -211,7 +252,6 @@ class AppMap extends Component {
     }) => {
         //ctx.restore();
         //ctx.save();
-
         // Update center color value
         this.setCenterColorValues(ctx);
 
