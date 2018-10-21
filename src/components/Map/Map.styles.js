@@ -11,14 +11,13 @@ export const MapContainer = styled.div`
 `;
 
 export const Swatch = styled.div`
-    background-color: ${props => props.color || 'transparent'};
-
+    z-index: 9999;
     position: absolute;
     top: 0;
     right: 0;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
 
-    border: 1px solid red;
-    z-index: 9999;
+    border: 3px solid red;
+    background-color: ${props => props.color || 'transparent'};
 `;
