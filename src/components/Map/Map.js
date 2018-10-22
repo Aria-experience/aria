@@ -399,7 +399,11 @@ class AppMap extends Component {
                 <Header>
                     <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
                     <Title>
-                        <h1>Aria / Earth Song</h1>
+                        <h1>
+                            <span className="white">Aria</span> / Earth<span>
+                                Moog
+                            </span>
+                        </h1>
                         <h2>
                             Algorithmically Generated Music for Earth
                             Observation

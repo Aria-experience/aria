@@ -54,7 +54,6 @@ export const Title = styled.div`
     font-family: 'Lato', sans-serif;
 
     h1 {
-        text-transform: uppercase;
         padding: 5px 10px;
         display: inline-block;
         color: #fc3d21;
@@ -63,6 +62,18 @@ export const Title = styled.div`
         font-family: sans-serif;
         /*  background-color: white;
         text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); */
+        text-transform: uppercase;
+
+        span {
+            /*  color: #0b3d91; */
+            color: white;
+
+            font-weight: bold;
+
+            &.white {
+                color: #0b3d91;
+            }
+        }
     }
 
     h2 {
