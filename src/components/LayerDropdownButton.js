@@ -43,8 +43,8 @@ const Container = styled.div`
     font-size: 20px;
     position: absolute;
     z-index: 999999;
-    top: 0;
-    left: 0;
+    top: 90px;
+    right: 10px;
     margin-left: 10px;
 
     display: inline-block;
@@ -52,12 +52,11 @@ const Container = styled.div`
 const Button = styled.button`
     width: 200px;
     padding: 5px 16px;
-    border-radius: 5px;
     border: none;
     font-weight: bold;
     font-size: 20px
     color: white;
-    background-color: #96aff6;
+    background-color: white;
 `;
 
 const List = styled.ul`

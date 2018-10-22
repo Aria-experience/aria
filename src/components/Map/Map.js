@@ -20,7 +20,7 @@ import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
 import {gibs} from '../LayerDropdownButton';
 // Styles
-import {MapContainer, Swatch} from './Map.styles';
+import {MapContainer, Swatch, Header, Title} from './Map.styles';
 import LayerDropdown from '../LayerDropdownButton';
 
 // Map Component
@@ -61,7 +61,7 @@ class AppMap extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.warn('componentDidUpdate');
+        //console.warn('componentDidUpdate');
 
         /*  console.log(
             'prev',
@@ -290,7 +290,7 @@ class AppMap extends Component {
                 this.setState({viewportPalette: palette});
                 this.setMapVersion();
 
-                console.log('PALETTE', palette);
+                //console.log('PALETTE', palette);
             }
 
             // example usage:
@@ -327,8 +327,8 @@ class AppMap extends Component {
                 0,
                 2 * Math.PI
             );
-            ctx.lineWidth = 1 * pixelRatio;
-            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 3 * pixelRatio;
+            ctx.strokeStyle = '#0b3d91';
             ctx.stroke();
         }
     };
@@ -396,6 +396,16 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
+                <Header>
+                    <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
+                    <Title>
+                        <h1>Aria / Earth Song</h1>
+                        <h2>
+                            Algorithmically Generated Music for Earth
+                            Observation
+                        </h2>
+                    </Title>
+                </Header>
                 <LayerDropdown
                     visible={this.state.provider}
                     handleClick={this.onProviderChange}

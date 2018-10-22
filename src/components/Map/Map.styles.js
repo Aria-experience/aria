@@ -11,13 +11,65 @@ export const MapContainer = styled.div`
 `;
 
 export const Swatch = styled.div`
-    z-index: 9999;
+    z-index: 99999999;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 70px;
+    height: 70px;
+
+    border: 3px solid white;
+    background-color: ${props => props.color || 'transparent'};
+`;
+
+export const Header = styled.header`
     position: absolute;
     top: 0;
+    left: 0;
     right: 0;
-    width: 50px;
-    height: 50px;
+    z-index: 99999;
 
-    border: 3px solid red;
-    background-color: ${props => props.color || 'transparent'};
+    width: 100vw;
+    height: 130px;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.9) 00%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    background: rgba(0, 0, 0, 0.8);
+
+    img {
+        margin-top: 20px;
+        margin-left: 10px;
+    }
+`;
+
+export const Title = styled.div`
+    position: absolute;
+    left: 100px;
+    width: 700px;
+    top: 20px;
+    font-family: 'Lato', sans-serif;
+
+    h1 {
+        text-transform: uppercase;
+        padding: 5px 10px;
+        display: inline-block;
+        color: #fc3d21;
+        font-weight: 100;
+        margin: 0px 10px;
+        font-family: sans-serif;
+        /*  background-color: white;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); */
+    }
+
+    h2 {
+        display: inline-block;
+        margin: 0px 10px;
+        color: white;
+        font-weight: 100;
+        padding: 5px 10px;
+    }
 `;
