@@ -18,7 +18,7 @@ import {getWidth, getTopLeft} from 'ol/extent';
 // App
 import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
-
+import {gibs} from '../LayerDropdownButton';
 // Styles
 import {MapContainer, Swatch} from './Map.styles';
 import LayerDropdown from '../LayerDropdownButton';
@@ -35,7 +35,8 @@ class AppMap extends Component {
             centerPx: null,
             centerColor: 'transparent',
             viewportPalette: null,
-            version: 0
+            version: 0,
+            provider: 'modisReflectance'
         };
 
         this.mousePosition = null;
@@ -60,12 +61,14 @@ class AppMap extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(
+        console.warn('componentDidUpdate');
+
+        /*  console.log(
             'prev',
             prevState.viewportPalette,
             'curr',
             this.state.viewportPalette
-        );
+        ); */
         if (
             prevState.viewportPalette &&
             prevState.viewportPalette.DarkMuted !==
@@ -79,6 +82,30 @@ class AppMap extends Component {
         //     // state changed
         //     console.log('something changed');
         // }
+
+        if (this.state.provider !== prevState.provider) {
+            console.log('');
+            console.warn('provider changed');
+
+            console.log(
+                'gibs[this.state.provider].format',
+                gibs[this.state.provider].format
+            );
+
+            if (this.source) {
+                const url = createDataLayerXYZUrl(
+                    gibs[this.state.provider].productName,
+                    gibs[this.state.provider].date,
+                    null,
+                    gibs[this.state.provider].matrix,
+                    gibs[this.state.provider].format
+                );
+
+                console.log('url', url);
+
+                this.source.setUrl(url);
+            }
+        }
     }
 
     // Handle resizing of window, with debouncer for performance
@@ -118,7 +145,15 @@ class AppMap extends Component {
 
         // The OpenLayers Map Object
         this.map = new Map({
-            layers: [this.basemapLayer, this.createDataLayerXYZ()],
+            layers: [
+                /* this.basemapLayer, */ this.createDataLayerXYZ(
+                    gibs[this.state.provider].productName,
+                    gibs[this.state.provider].date,
+                    null,
+                    null,
+                    gibs[this.state.provider].format
+                )
+            ],
             target: 'map-container',
             view: this.view
         });
@@ -302,7 +337,6 @@ class AppMap extends Component {
     createDataLayerXYZ = () => {
         // TODO: remove these temporary layer configs and use dynamic url creation function instead
         const product = 'MODIS_Terra_CorrectedReflectance_TrueColor';
-        const date = '2013-06-15';
         const testUrl =
             'https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3857/best/' +
             'MODIS_Terra_CorrectedReflectance_TrueColor/default/2013-06-15/' +
@@ -311,8 +345,14 @@ class AppMap extends Component {
         // Create Layer Source
         this.source = new XYZ({
             crossOrigin: 'anonymous',
-            url: testUrl
-            //url: createDataLayerXYZUrl(product, date)
+            //url: testUrl
+            url: createDataLayerXYZUrl(
+                gibs[this.state.provider].productName,
+                gibs[this.state.provider].date,
+                null,
+                null,
+                gibs[this.state.provider].format
+            )
         });
 
         // Create Layer
@@ -338,6 +378,17 @@ class AppMap extends Component {
         return this.dataLayer;
     };
 
+    onProviderChange = provider => {
+        //console.log('onProviderChange');
+        //console.log('provider', provider);
+
+        this.setState({
+            ...this.state,
+            provider: provider,
+            version: +!this.state.version
+        });
+    };
+
     render() {
         // Construct color code
         const colorCode = `rgb(${this.state.centerColor.r}, ${
@@ -345,7 +396,10 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
-                <LayerDropdown />
+                <LayerDropdown
+                    visible={this.state.provider}
+                    handleClick={this.onProviderChange}
+                />
                 <Swatch color={colorCode} />
             </MapContainer>
         );

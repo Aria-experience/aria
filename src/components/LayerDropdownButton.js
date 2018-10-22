@@ -3,23 +3,39 @@ import styled from 'react-emotion';
 
 import PropTypes from 'prop-types';
 
-const gibs = {
+export const gibs = {
     modisReflectance: {
         title: 'MODIS Terra Visual',
-        productName: 'MODIS_Terra_CorrectedReflectance_TrueColor'
+        productName: 'MODIS_Terra_CorrectedReflectance_TrueColor',
+        date: '2013-06-15',
+        format: 'jpg',
+        matrix: 'GoogleMapsCompatible_Level9'
     },
     humanPop: {
-        title: 'Humans',
-        productName: 'Human_Footprint_1995-2004'
+        title: 'Human Footprint (Global Human Footprint, 1995-2004)',
+        productName: 'Human_Footprint_1995-2004',
+        matrix: 'GoogleMapsCompatible_Level7',
+        format: 'png'
     },
     vegetation: {
-        title: 'Vegetation',
-        productName: 'MODIS_Terra_NDVI_8Day'
+        title: 'Vegetation Index (8-Day, MODIS, Terra)',
+        productName: 'MODIS_Terra_NDVI_8Day',
+        format: 'png',
+        date: '2018-10-15',
+        matrix: 'GoogleMapsCompatible_Level9'
     },
-    biosphere: {title: 'Biosphere', productName: 'Last_of_the_Wild_1995-2004'},
-    fire: {
-        title: 'Fire',
-        productName: 'MODIS_Fires_Terra'
+    biosphere: {
+        title: 'Last_of_the_Wild_1995-2004',
+        productName: 'Last_of_the_Wild_1995-2004',
+        matrix: 'GoogleMapsCompatible_Level7',
+        format: 'png'
+    },
+    night: {
+        title: 'Earth at Night  2012',
+        productName: 'VIIRS_CityLights_2012',
+        format: 'jpeg',
+        date: '2016-03-18',
+        matrix: 'GoogleMapsCompatible_Level8'
     }
 };
 
@@ -34,7 +50,7 @@ const Container = styled.div`
     display: inline-block;
 `;
 const Button = styled.button`
-width: 150px;
+    width: 200px;
     padding: 5px 16px;
     border-radius: 5px;
     border: none;
@@ -45,7 +61,7 @@ width: 150px;
 `;
 
 const List = styled.ul`
-    width: 150px;
+    width: 200px;
     color: black;
     background-color: rgba(255, 255, 255, 0.5);
     padding: 10px;
@@ -88,7 +104,7 @@ class LayerDropdown extends React.Component {
                 <Item
                     selected={this.props.selected === key}
                     key={key}
-                    onClick={() => this.handleClick(items[key].productName)}
+                    onClick={() => this.handleClick(key)}
                 >
                     {items[key].title}
                 </Item>

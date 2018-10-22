@@ -15,4 +15,6 @@ export const createDataLayerXYZUrl = (
     urlSuffix = GIBS_DEFAULT_SUFFIX,
     fileFormat = DEFAULT_FORMAT_SUFFIX
 ) =>
-    `${baseUrl}/${productName}/default/${date}/${urlSuffix}/${XYZ_SUFFIX}/${fileFormat}`;
+    `${baseUrl || GIBS_BASE_URL}/${productName}/default/${
+        date ? date + '/' : ''
+    }${urlSuffix || GIBS_DEFAULT_SUFFIX}/${XYZ_SUFFIX}${fileFormat}`;
