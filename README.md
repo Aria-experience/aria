@@ -12,7 +12,7 @@
 * [Aria Team Hackathon Project Page](https://2018.spaceappschallenge.org/challenges/help-others-discover-earth/artify-earth/teams/aria-earthmoog/project)
 * [Wiki](https://github.com/Aria-experience/aria/wiki)
 
-## [Team](https://2018.spaceappschallenge.org/challenges/help-others-discover-earth/artify-earth/teams/aria-earthmoog/project)
+## Team
 
 * [Melissa Ugas](https://github.com/melugas)
 * [Jennifer Watanabe](https://github.com/jentoobento)
