@@ -1,5 +1,5 @@
 {
-  "name": "nasaspaceappsaria",
+  "name": "aria-app",
   "version": "1.0.0",
   "description": "",
   "author": "",
@@ -16,10 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:mardb/nasaspaceappsaria.git"
+    "url": "git@github.com:Aria-experience/aria.git"
   },
   "bugs": {
-    "url": "https://github.com/mardb/nasaspaceappsaria/issues",
+    "url": "https://github.com/Aria-experience/aria/issues",
     "email": ""
   },
   "browserlist": [
