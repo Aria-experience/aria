@@ -55,6 +55,9 @@ class AppMap extends Component {
         });
 
         //Play('hello test');
+
+        const music = new Sound();
+        music.init();
     }
 
     componentWillUnmount() {
@@ -398,7 +401,6 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
-                <Sound />
                 <Header>
                     <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
                     <Title>
