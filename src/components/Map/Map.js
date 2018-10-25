@@ -19,6 +19,8 @@ import {getWidth, getTopLeft} from 'ol/extent';
 import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
 import {gibs} from '../LayerDropdownButton';
+import Sound from '../Sound';
+
 // Styles
 import {MapContainer, Swatch, Header, Title} from './Map.styles';
 import LayerDropdown from '../LayerDropdownButton';
@@ -52,7 +54,7 @@ class AppMap extends Component {
             passive: true
         });
 
-        Play('hello test');
+        //Play('hello test');
     }
 
     componentWillUnmount() {
@@ -74,8 +76,8 @@ class AppMap extends Component {
             prevState.viewportPalette.DarkMuted !==
                 this.state.viewportPalette.DarkMuted
         ) {
-            console.log('yay');
-            Play(this.state.viewportPalette.DarkMuted);
+            //console.log('yay');
+            //Play(this.state.viewportPalette.DarkMuted);
         }
         // if (prevState.viewportPalette !== this.state.viewportPalette) {
         //     // user moved mouse
@@ -396,6 +398,7 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
+                <Sound />
                 <Header>
                     <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
                     <Title>
