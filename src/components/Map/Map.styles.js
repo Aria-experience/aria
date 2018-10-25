@@ -84,3 +84,15 @@ export const Title = styled.div`
         padding: 5px 10px;
     }
 `;
+
+export const ToggleSound = styled.div`
+    z-index: 99999999;
+    position: absolute;
+    top: 35px;
+    right: 90px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+`;

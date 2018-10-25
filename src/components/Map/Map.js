@@ -20,8 +20,11 @@ import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
 import {gibs} from '../LayerDropdownButton';
 // Styles
-import {MapContainer, Swatch, Header, Title} from './Map.styles';
+import {MapContainer, Swatch, Header, Title, ToggleSound} from './Map.styles';
 import LayerDropdown from '../LayerDropdownButton';
+
+//icons
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 // Map Component
 class AppMap extends Component {
@@ -36,7 +39,9 @@ class AppMap extends Component {
             centerColor: 'transparent',
             viewportPalette: null,
             version: 0,
-            provider: 'modisReflectance'
+            provider: 'modisReflectance',
+            toggleSoundIcon: 'volume-up',
+            isSoundOn: true
         };
 
         this.mousePosition = null;
@@ -389,6 +394,17 @@ class AppMap extends Component {
         });
     };
 
+    toggleSound = () => {
+        this.setState({
+            ...this.state,
+            isSoundOn: this.state.isSoundOn ? false : true,
+            toggleSoundIcon:
+                this.state.toggleSoundIcon === 'volume-up'
+                    ? 'volume-off'
+                    : 'volume-up'
+        });
+    };
+
     render() {
         // Construct color code
         const colorCode = `rgb(${this.state.centerColor.r}, ${
@@ -414,6 +430,9 @@ class AppMap extends Component {
                     visible={this.state.provider}
                     handleClick={this.onProviderChange}
                 />
+                <ToggleSound onClick={this.toggleSound}>
+                    <FontAwesomeIcon icon={this.state.toggleSoundIcon} />
+                </ToggleSound>
                 <Swatch color={colorCode} />
             </MapContainer>
         );
