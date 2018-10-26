@@ -61,14 +61,19 @@
     ]
   },
   "dependencies": {
+    "color-namer": "^1.3.0",
     "emotion": "^9.2.4",
+    "highcharts": "^6.2.0",
+    "name-this-color": "^1.0.2",
     "node-vibrant": "^3.0.0",
     "ol": "^5.2.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-emotion": "^9.2.4",
+    "react-highcharts": "^16.0.2",
     "react-hot-loader": "^4.3.3",
-    "tone": "^0.12.80"
+    "tone": "^0.12.80",
+    "underscore": "^1.9.1"
   }
 }

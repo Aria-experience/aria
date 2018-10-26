@@ -8,6 +8,7 @@ export const GlobalStyles = () => injectGlobal`
   body, html {
     margin:0;
     padding:0;
+    font-family: 'Lato', sans-serif;
   }
 
   a {
