@@ -15,6 +15,7 @@ class ColorSwatch extends Component {
         };
     }
 
+    /*
     componentDidUpdate(prevProps, prevState) {
         // If the color changes
         if (prevProps.color !== this.props.color) {
@@ -25,11 +26,11 @@ class ColorSwatch extends Component {
             this.setState({name: colorName});
         }
     }
-
+    */
     render() {
         return (
             <Swatch color={this.props.color}>
-                <ColorText title="Color Name">{this.state.name}</ColorText>
+                {/* <ColorText title="Color Name">{this.state.name}</ColorText> */}
             </Swatch>
         );
     }
