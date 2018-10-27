@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as Vibrant from 'node-vibrant';
+import {isEqual} from 'lodash';
 
 // Open Layers Imports
 import Map from 'ol/Map';
@@ -15,7 +16,8 @@ import {toLonLat} from 'ol/proj';
 
 // App
 import {createDataLayerXYZUrl} from './utils';
-import Play from '../Audio';
+// import Play from '../Audio';
+import Play from '../Audio/PlayAudio';
 import {gibs} from '../LayerDropdownButton';
 import Graph from '../Graph';
 
@@ -58,6 +60,9 @@ class AppMap extends Component {
         window.addEventListener('resize', this.handleResize, {
             passive: true
         });
+
+        this.sound = new Play();
+        this.sound.init();
     }
 
     // When the component unmounts
@@ -71,13 +76,17 @@ class AppMap extends Component {
         //console.warn('componentDidUpdate');
 
         // Check if the palette changed
-        if (
-            prevState.viewportPalette &&
-            prevState.viewportPalette.DarkMuted !==
-                this.state.viewportPalette.DarkMuted
-        ) {
-            // Pass the new value to the music Play function
-            Play(this.state.viewportPalette.DarkMuted);
+        // if (
+        //     prevState.viewportPalette &&
+        //     prevState.viewportPalette.DarkMuted !==
+        //         this.state.viewportPalette.DarkMuted
+        // ) {
+        //     // Pass the new value to the music Play function
+        //     //Play(this.state.viewportPalette.DarkMuted);
+        // }
+
+        if (!isEqual(prevState.centerColor, this.state.centerColor)) {
+            this.sound.playSingleNoteFromColor(this.state.centerColor);
         }
 
         // Update the map layer with new provider
