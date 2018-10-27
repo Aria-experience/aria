@@ -11,6 +11,8 @@ import {DEVICE_PIXEL_RATIO} from 'ol/has.js';
 import OSM from 'ol/source/OSM';
 import {toLonLat} from 'ol/proj';
 
+// import Play from
+
 // App
 import {createDataLayerXYZUrl} from './utils';
 import Play from '../Audio';
@@ -343,12 +345,7 @@ class AppMap extends Component {
             ctx.stroke();
 
             // Draw a rectangle around center pixel
-            ctx.rect(
-                this.state.centerPx.x - 1,
-                this.state.centerPx.y - 1,
-                3,
-                3
-            );
+            ctx.rect(1000, 1000, 1000, 500);
             ctx.lineWidth = 1;
             ctx.stroke();
         }
