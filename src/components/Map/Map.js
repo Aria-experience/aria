@@ -325,6 +325,16 @@ class AppMap extends Component {
         // Update center color value
         this.setCenterColorValues(ctx);
 
+        // Animate trail from center value --mel is still working on this
+        if (this.state.centerPx) {
+            ctx.beginPath();
+            ctx.rect(500, 500, 5, 5);
+            //ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'blue';
+            ctx.stroke();
+        }
+
         // If center is ready
         if (this.state.centerPx) {
             // Begin drawing the "circle crosshair"
@@ -353,6 +363,15 @@ class AppMap extends Component {
             ctx.stroke();
         }
     };
+
+    // //Animation Loop
+    // animateTrail = ({context: ctx}) => {
+    //     // const duration = trailDuration * 1000 / 60;
+    //     // const point, lastPoint;
+    //     requestAnimationFrame(animateTrail);
+    //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    //     //loop here
+    // };
 
     /*
     onDataLayerPrecompose = ({
