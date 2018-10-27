@@ -10,18 +10,6 @@ export const MapContainer = styled.div`
     background-color: black;
 `;
 
-export const Swatch = styled.div`
-    z-index: 99999999;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 70px;
-    height: 70px;
-
-    border: 3px solid white;
-    background-color: ${props => props.color || 'transparent'};
-`;
-
 export const Header = styled.header`
     position: absolute;
     top: 0;
@@ -51,7 +39,6 @@ export const Title = styled.div`
     left: 100px;
     width: 700px;
     top: 20px;
-    font-family: 'Lato', sans-serif;
 
     h1 {
         padding: 5px 10px;
@@ -59,9 +46,6 @@ export const Title = styled.div`
         color: #fc3d21;
         font-weight: 100;
         margin: 0px 10px;
-        font-family: sans-serif;
-        /*  background-color: white;
-        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); */
         text-transform: uppercase;
 
         span {
@@ -82,5 +66,41 @@ export const Title = styled.div`
         color: white;
         font-weight: 100;
         padding: 5px 10px;
+    }
+`;
+
+export const MapCenterLatLong = styled.span`
+    color: rgba(255, 255, 255, 0.8);
+`;
+
+export const Footer = styled.div`
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+
+    padding: 5px 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+
+    text-align: right;
+`;
+
+export const Swatch = styled.div`
+    z-index: 99999999;
+    position: absolute;
+    bottom: 25px;
+    right: 10px;
+    width: 30px;
+    height: 167px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: ${props => props.color || 'transparent'};
+
+    transition: width 0.5s ease-in-out;
+
+    &:hover {
+        width: 100px;
     }
 `;
