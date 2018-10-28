@@ -1,7 +1,7 @@
-const PATHS = require("./paths.config");
+const PATHS = require('./paths.config');
 
 module.exports = {
     contentBase: PATHS.build,
-    progress: true,
+    progress: false,
     hot: true
 };
