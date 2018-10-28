@@ -8,6 +8,8 @@ export const MapContainer = styled.div`
     bottom: 0;
 
     background-color: black;
+
+    overflow: hidden;
 `;
 
 export const Header = styled.header`

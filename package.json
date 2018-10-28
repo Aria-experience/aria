@@ -73,6 +73,7 @@
     "react-emotion": "^9.2.4",
     "react-highcharts": "^16.0.2",
     "react-hot-loader": "^4.3.3",
+    "react-spinners": "^0.4.7",
     "tone": "^0.12.80",
     "underscore": "^1.9.1"
   }

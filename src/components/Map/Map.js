@@ -12,7 +12,7 @@ import OSM from 'ol/source/OSM';
 import {toLonLat} from 'ol/proj';
 
 // App
-import {createDataLayerXYZUrl} from './utils';
+import {createDataLayerXYZUrl, fetchGibsCapabilities} from './utils';
 import Play from '../Audio';
 import {gibs} from '../LayerDropdownButton';
 import Graph from '../Graph';
@@ -27,6 +27,7 @@ import {
 } from './Map.styles';
 import LayerDropdown from '../LayerDropdownButton';
 import ColorSwatch from '../ColorSwatch';
+import ProviderPicker from '../ProviderPicker';
 // Map Component
 class AppMap extends Component {
     constructor(props) {
@@ -41,7 +42,8 @@ class AppMap extends Component {
             viewportPalette: null,
             version: 0,
             provider: 'modisReflectance',
-            mapMoving: false
+            mapMoving: false,
+            capabilities: null
         };
 
         this.mousePosition = null;
@@ -49,6 +51,11 @@ class AppMap extends Component {
 
     // Things that happen when the component first mounts
     componentDidMount() {
+        // Get the gibs data list and set it to state
+        fetchGibsCapabilities().then(capabilities =>
+            this.setState({capabilities})
+        );
+
         // Initialize the Map
         this.createMap();
 
@@ -464,6 +471,7 @@ class AppMap extends Component {
                         </MapCenterLatLong>
                     )}
                 </Footer>
+                <ProviderPicker capabilities={this.state.capabilities} />
             </MapContainer>
         );
     }
