@@ -1,5 +1,7 @@
 import styled from 'react-emotion';
 
+const HEADER_HEIGHT = 115;
+
 export const MapContainer = styled.div`
     position: absolute;
     top: 0;
@@ -19,17 +21,14 @@ export const Header = styled.header`
     right: 0;
     z-index: 99999;
     width: 100vw;
-    height: 130px;
+    height: ${HEADER_HEIGHT}px;
     display: flex;
     flex-direction: row;
 
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.9) 00%,
-        rgba(0, 0, 0, 0.5) 50%,
-        rgba(0, 0, 0, 0) 100%
-    );
-    background: rgba(0, 0, 0, 0.8);
+    background: #8a2387; /* fallback for old browsers */
+    background: linear-gradient(to left, #f27121, #e94057, #8a2387);
+
+    box-shadow: 0 8px 4px -4px rgba(0, 0, 0, 0.5);
 
     img {
         margin-top: 20px;
@@ -39,6 +38,22 @@ export const Header = styled.header`
 
 export const HeaderLeft = styled.div`
     flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+
+    /* Logo and title */
+    h1 {
+        padding: 5px 10px;
+        color: white;
+        font-weight: 100;
+        margin: 0px 10px;
+        text-transform: uppercase;
+
+        img {
+            height: ${HEADER_HEIGHT - 30}px;
+            width: auto;
+        }
+    }
 `;
 export const HeaderRight = styled.div`
     flex: 0 0 auto;
@@ -48,7 +63,7 @@ export const HeaderRight = styled.div`
 
 export const DataSource = styled.div`
     position: absolute;
-    bottom: -30px;
+    bottom: -35px;
     right: 20px;
 
     height: 60px;
@@ -56,7 +71,10 @@ export const DataSource = styled.div`
     text-align: right;
 
     padding: 10px;
-    background-color: #666666;
+    background-color: white;
+    color: black;
+
+    box-shadow: -3px 3px 2px rgba(0, 0, 0, 0.5);
 
     white-space: nowrap;
     overflow: hidden;
@@ -65,40 +83,32 @@ export const DataSource = styled.div`
     strong {
         display: block;
     }
+
+    /* For Phone */
+    @media only screen and (max-width: 600px) {
+        width: 100vw;
+        bottom: -60px;
+        right: 0;
+    }
 `;
 
-export const Title = styled.div`
-    position: absolute;
-    left: 100px;
-    width: 700px;
-    top: 20px;
-
-    h1 {
-        padding: 5px 10px;
-        display: inline-block;
-        color: #fc3d21;
-        font-weight: 100;
-        margin: 0px 10px;
-        text-transform: uppercase;
-
-        span {
-            /*  color: #0b3d91; */
-            color: white;
-
-            font-weight: bold;
-
-            &.white {
-                color: #0b3d91;
-            }
-        }
-    }
-
+export const Subtitles = styled.div`
     h2 {
-        display: inline-block;
-        margin: 0px 10px;
+        margin: 0px;
         color: white;
         font-weight: 100;
-        padding: 5px 10px;
+        font-size: 25px;
+        margin-bottom: 5px;
+    }
+    h3 {
+        margin: 0px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        h2,
+        h3 {
+            display: none;
+        }
     }
 `;
 

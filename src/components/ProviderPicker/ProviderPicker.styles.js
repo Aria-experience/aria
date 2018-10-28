@@ -21,6 +21,10 @@ export const Wrapper = styled.div`
 
     transition: transform 0.5s ease-in-out;
     transform: translate3d(${({open}) => (open ? '0' : '100%')}, 0, 0);
+
+    @media only screen and (max-width: 600px) {
+        width: 100vw;
+    }
 `;
 
 export const LoadingIndicator = styled.div`
@@ -62,7 +66,8 @@ export const ShowHideButton = styled.div`
         border-top: 12px solid transparent;
         border-bottom: 12px solid transparent;
 
-        border-left: 12px solid ${NASA_BLUE};
+        border-left: 12px solid #6ab82f;
+        z-index: 1;
     }
 
     &:after {
@@ -76,8 +81,19 @@ export const ShowHideButton = styled.div`
         font-size: 18px;
         transform: translateX(-230px);
         padding: 10px;
+        color: black;
+        font-weight: bold;
+        z-index: 0;
 
-        background-color: ${NASA_BLUE};
+        background-color: #6ab82f;
+        /* box-shadow: -2px 3px 0px rgba(0, 0, 0, 0.3); */
+    }
+
+    @media only screen and (max-width: 600px) {
+        &:after,
+        &:before {
+            display: none;
+        }
     }
 `;
 

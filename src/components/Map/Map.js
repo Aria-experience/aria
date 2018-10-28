@@ -17,12 +17,12 @@ import {
 } from './utils';
 import Play from '../Audio';
 import Graph from '../Graph';
-
+import AriaLogo from '../../assets/logo.png';
 // Styles
 import {
     MapContainer,
     Header,
-    Title,
+    Subtitles,
     Footer,
     MapCenterLatLong,
     HeaderRight,
@@ -53,7 +53,8 @@ class AppMap extends Component {
             version: 0,
             mapMoving: false,
             currentLayer: START_LAYER.id,
-            capabilities: null
+            capabilities: null,
+            splash: true
         };
 
         this.mousePosition = null;
@@ -324,21 +325,24 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
-                <Header>
+                <Header role="banner">
                     <HeaderLeft>
-                        <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
-                        <Title>
+                        <a
+                            href="http://aria.earth"
+                            title="Aria: Earth has a Voice. Take a Listen."
+                        >
                             <h1>
-                                <span className="white">Aria</span> / Earth<span
-                                >
-                                    Moog
-                                </span>
+                                <img src={AriaLogo} alt="Aria" />
                             </h1>
-                            <h2>
+                        </a>
+
+                        <Subtitles>
+                            <h2>Earth has a Voice. Take a Listen</h2>
+                            <h3>
                                 Algorithmically Generated Music for Earth
                                 Observation
-                            </h2>
-                        </Title>
+                            </h3>
+                        </Subtitles>
                     </HeaderLeft>
                     <HeaderRight>
                         <DataSource>

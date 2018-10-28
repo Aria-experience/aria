@@ -25,7 +25,6 @@ export const Swatch = styled.div`
     width: 30px;
     height: 167px;
 
-    border: 1px solid rgba(255, 255, 255, 0.5);
     background-color: ${props => props.color || 'transparent'};
 
     transition: width 0.5s ease-in-out;
