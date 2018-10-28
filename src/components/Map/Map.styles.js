@@ -18,9 +18,10 @@ export const Header = styled.header`
     left: 0;
     right: 0;
     z-index: 99999;
-
     width: 100vw;
     height: 130px;
+    display: flex;
+    flex-direction: row;
 
     background: linear-gradient(
         to bottom,
@@ -33,6 +34,36 @@ export const Header = styled.header`
     img {
         margin-top: 20px;
         margin-left: 10px;
+    }
+`;
+
+export const HeaderLeft = styled.div`
+    flex: 1 0 auto;
+`;
+export const HeaderRight = styled.div`
+    flex: 0 0 auto;
+    position: relative;
+    color: white;
+`;
+
+export const DataSource = styled.div`
+    position: absolute;
+    bottom: -30px;
+    right: 20px;
+
+    height: 60px;
+    width: 350px;
+    text-align: right;
+
+    padding: 10px;
+    background-color: #666666;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    strong {
+        display: block;
     }
 `;
 

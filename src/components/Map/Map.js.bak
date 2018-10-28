@@ -1,0 +1,108 @@
+// Old code snippets we're not using currently from Map.js
+
+
+        // The basemap layer
+        this.basemapLayer = new TileLayer({
+            source: new OSM(),
+            zIndex: 0,
+            visible: false
+        });
+
+     /*
+        // Add mouse listener
+        this.map.on('pointermove', event => {
+            //console.log('');
+            //console.log('pointermove event', event);
+
+            this.mousePosition = event.pixel;
+             //console.log('this.mousePosition', this.mousePosition);
+             this.map.render();
+             //var xy = event.pixel;
+             //console.log('this.map', this.map);
+             //var pixelAtClick = canvasContext.getImageData(xy[0], xy[1], 1, 1).data;
+             //var red = pixeAtClick[0]; // green is [1] , blue is [2] , alpha is [4]
+         });
+         */
+
+        /* Attach "compose" listeners */
+
+        // Pre compose
+        //this.dataLayer.on('precompose', this.onDataLayerPrecompose);
+
+        // Mouse position pixels
+        // this.dataLayer.on('postcompose', this.getMousePixelValues);
+
+        // Layer Spy
+        //this.dataLayer.on('precompose', event => this.spyCompose('precompose', event));
+        //this.dataLayer.on('postcompose', event =>  this.spyCompose('postcompose', event));
+
+
+    /*
+    onDataLayerPrecompose = ({
+        context: ctx,
+        frameState: {pixelRatio},
+        ...event
+    }) => {};
+    */
+
+    /*
+    // Layer spy compose
+    spyCompose = (type, event) => {
+        const ctx = event.context;
+
+        if (type === 'postcompose') {
+            ctx.restore();
+        } else {
+            const pixelRatio = event.frameState.pixelRatio;
+            ctx.save();
+            ctx.beginPath();
+            if (this.mousePosition) {
+                // only show a circle around the mouse
+                ctx.arc(
+                    this.mousePosition[0] * pixelRatio,
+                    this.mousePosition[1] * pixelRatio,
+                    this.state.radius * pixelRatio,
+                    0,
+                    2 * Math.PI
+                );
+                ctx.lineWidth = 5 * pixelRatio;
+                ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+                ctx.stroke();
+            }
+            ctx.clip();
+        }
+    };
+    */
+    /*
+    // Calculate pixel color values at mouse position
+    getMousePixelValues = event => {
+        //console.log('');
+        //console.warn('getPixelValues');
+        //console.log('event', event);
+
+        const {
+            context: ctx,
+            frameState: {pixelRatio}
+        } = event;
+
+        if (this.mousePosition) {
+            const x = this.mousePosition[0] * pixelRatio;
+            const y = this.mousePosition[1] * pixelRatio;
+
+            const imageData = ctx.getImageData(x, y, 1, 1).data;
+
+            const color =
+                'rgb(' +
+                imageData[0] +
+                ',' +
+                imageData[1] +
+                ',' +
+                imageData[2] +
+                ')';
+
+            //console.log('color', color);
+
+            this.setState({color: color});
+        }
+    };
+    */

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {BounceLoader, ClipLoader} from 'react-spinners';
 
 // App
+import {getLayerById} from '../Map/utils';
 
 // Styles
 import {
@@ -25,7 +26,7 @@ class ProviderPicker extends Component {
         // Initial state
         this.state = {
             open: false, // If the sidebar is open or not
-            selected: 'MODIS_Terra_CorrectedReflectance_TrueColor' // the identifier of the currently selected layer, initially set to MOIDS
+            selected: 'VIIRS_SNPP_CorrectedReflectance_TrueColor' // the identifier of the currently selected layer, initially set to MOIDS
         };
     }
 
@@ -52,13 +53,6 @@ class ProviderPicker extends Component {
 
     // Toggle the sidebar
     toggleOpen = () => this.setState({open: !this.state.open});
-
-    // Get a layer object by id/identifier of the layer
-    getLayerById = id =>
-        this.props.capabilities &&
-        this.props.capabilities.Contents.Layer.find(
-            item => item.Identifier === id
-        );
 
     // Handle setting the currently selected item
     setSelected = id => {
@@ -160,9 +154,10 @@ class ProviderPicker extends Component {
                             <h5>
                                 <strong>Current Source:</strong> <br />
                                 {
-                                    this.getLayerById(this.state.selected)[
-                                        'Title'
-                                    ]
+                                    getLayerById(
+                                        this.state.selected,
+                                        this.props.capabilities
+                                    )['Title']
                                 }
                             </h5>
                         </Header>

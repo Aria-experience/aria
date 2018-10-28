@@ -8,13 +8,14 @@ import TileLayer from 'ol/layer/Tile';
 import {fromLonLat} from 'ol/proj';
 import XYZ from 'ol/source/XYZ';
 import {DEVICE_PIXEL_RATIO} from 'ol/has.js';
-import OSM from 'ol/source/OSM';
 import {toLonLat} from 'ol/proj';
-
 // App
-import {createDataLayerXYZUrl, fetchGibsCapabilities} from './utils';
+import {
+    getLayerById,
+    createWMTSsourceFromCapabilities,
+    fetchGibsCapabilities
+} from './utils';
 import Play from '../Audio';
-import {gibs} from '../LayerDropdownButton';
 import Graph from '../Graph';
 
 // Styles
@@ -23,11 +24,20 @@ import {
     Header,
     Title,
     Footer,
-    MapCenterLatLong
+    MapCenterLatLong,
+    HeaderRight,
+    HeaderLeft,
+    DataSource
 } from './Map.styles';
-import LayerDropdown from '../LayerDropdownButton';
 import ColorSwatch from '../ColorSwatch';
 import ProviderPicker from '../ProviderPicker';
+
+// The default start layer
+const START_LAYER = {
+    title: 'Corrected Reflectance (True Color, VIIRS, SNPP)',
+    id: 'VIIRS_SNPP_CorrectedReflectance_TrueColor'
+};
+
 // Map Component
 class AppMap extends Component {
     constructor(props) {
@@ -41,8 +51,8 @@ class AppMap extends Component {
             centerColor: 'transparent',
             viewportPalette: null,
             version: 0,
-            provider: 'modisReflectance',
             mapMoving: false,
+            currentLayer: START_LAYER.id,
             capabilities: null
         };
 
@@ -53,7 +63,7 @@ class AppMap extends Component {
     componentDidMount() {
         // Get the gibs data list and set it to state
         fetchGibsCapabilities().then(capabilities =>
-            this.setState({capabilities})
+            this.setState({capabilities: capabilities})
         );
 
         // Initialize the Map
@@ -73,7 +83,16 @@ class AppMap extends Component {
 
     // Whenever the component updates
     componentDidUpdate(prevProps, prevState) {
-        //console.warn('componentDidUpdate');
+        // Update the current layer
+        if (prevState.currentLayer !== this.state.currentLayer) {
+            // Set the new source as the data layer source on the map
+            this.dataLayer.setSource(
+                createWMTSsourceFromCapabilities(
+                    this.state.currentLayer,
+                    this.state.capabilities
+                )
+            );
+        }
 
         // Check if the palette changed
         if (
@@ -83,24 +102,6 @@ class AppMap extends Component {
         ) {
             // Pass the new value to the music Play function
             Play(this.state.viewportPalette.DarkMuted);
-        }
-
-        // Update the map layer with new provider
-        if (this.state.provider !== prevState.provider) {
-            // check if the layer source is available
-            if (this.source) {
-                // Construct the new layer url
-                const url = createDataLayerXYZUrl(
-                    gibs[this.state.provider].productName,
-                    gibs[this.state.provider].date,
-                    null,
-                    gibs[this.state.provider].matrix,
-                    gibs[this.state.provider].format
-                );
-
-                // Update the source url
-                this.source.setUrl(url);
-            }
         }
     }
 
@@ -125,13 +126,6 @@ class AppMap extends Component {
 
     // Create our map
     createMap = () => {
-        // The basemap layer
-        this.basemapLayer = new TileLayer({
-            source: new OSM(),
-            zIndex: 0,
-            visible: false
-        });
-
         // The Map View
         this.view = new View({
             center: fromLonLat([0, 0]),
@@ -142,18 +136,12 @@ class AppMap extends Component {
 
         // The OpenLayers Map Object
         this.map = new Map({
-            layers: [
-                this.createDataLayerXYZ(
-                    gibs[this.state.provider].productName,
-                    gibs[this.state.provider].date,
-                    null,
-                    null,
-                    gibs[this.state.provider].format
-                )
-            ],
             target: 'map-container',
             view: this.view
         });
+
+        // Create the data layer
+        this.createDataLayer();
 
         /* Map Listeners */
 
@@ -197,22 +185,6 @@ class AppMap extends Component {
             // Unset map moving state
             this.setState({mapMoving: false});
         });
-
-        /*
-        // Add mouse listener
-        this.map.on('pointermove', event => {
-            //console.log('');
-            //console.log('pointermove event', event);
-
-            this.mousePosition = event.pixel;
-             //console.log('this.mousePosition', this.mousePosition);
-             this.map.render();
-             //var xy = event.pixel;
-             //console.log('this.map', this.map);
-             //var pixelAtClick = canvasContext.getImageData(xy[0], xy[1], 1, 1).data;
-             //var red = pixeAtClick[0]; // green is [1] , blue is [2] , alpha is [4]
-         });
-         */
     };
 
     // Set the map version (a little trick to force map to update)
@@ -263,7 +235,6 @@ class AppMap extends Component {
                 // Set the viewport palette
                 this.setState({viewportPalette: palette});
                 //this.setMapVersion();
-
                 //console.log('PALETTE', palette);
             }
 
@@ -273,52 +244,37 @@ class AppMap extends Component {
     };
 
     // Creates the data layer
-    createDataLayerXYZ = () => {
-        // Create Layer Source
-        this.source = new XYZ({
+    createDataLayer = () => {
+        // Create a temporary Layer Source to show while we load the gibs catalog
+        const startSource = new XYZ({
             crossOrigin: 'anonymous',
-            //url: testUrl
-            url: createDataLayerXYZUrl(
-                gibs[this.state.provider].productName,
-                gibs[this.state.provider].date,
-                null,
-                null,
-                gibs[this.state.provider].format
-            )
+            url: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${
+                this.state.currentLayer
+            }/default/2016-01-10/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`
         });
+
+        //Create Layer Source
+        //this.dataLayerSource = new WMTS();
 
         // Create Layer
         this.dataLayer = new TileLayer({
-            source: this.source,
+            source: startSource,
             zIndex: 1
         });
 
         /* Attach "compose" listeners */
 
-        // Pre compose
-        //this.dataLayer.on('precompose', this.onDataLayerPrecompose);
-
         // Post compose
         this.dataLayer.on('postcompose', this.onDataLayerPostcompose);
 
-        // Mouse position pixels
-        // this.dataLayer.on('postcompose', this.getMousePixelValues);
-
-        // Layer Spy
-        //this.dataLayer.on('precompose', event => this.spyCompose('precompose', event));
-        //this.dataLayer.on('postcompose', event =>  this.spyCompose('postcompose', event));
-
-        return this.dataLayer;
+        this.map.addLayer(this.dataLayer);
     };
 
-    // Handle Chaning the provider
-    onProviderChange = provider => {
+    // Handle Chaning the current map layer
+    handleLayerChange = layerId =>
         this.setState({
-            ...this.state,
-            provider: provider,
-            version: +!this.state.version
+            currentLayer: layerId
         });
-    };
 
     // Post Compose for map layer
     onDataLayerPostcompose = ({
@@ -361,76 +317,6 @@ class AppMap extends Component {
         }
     };
 
-    /*
-    onDataLayerPrecompose = ({
-        context: ctx,
-        frameState: {pixelRatio},
-        ...event
-    }) => {};
-    */
-
-    /*
-    // Layer spy compose
-    spyCompose = (type, event) => {
-        const ctx = event.context;
-
-        if (type === 'postcompose') {
-            ctx.restore();
-        } else {
-            const pixelRatio = event.frameState.pixelRatio;
-            ctx.save();
-            ctx.beginPath();
-            if (this.mousePosition) {
-                // only show a circle around the mouse
-                ctx.arc(
-                    this.mousePosition[0] * pixelRatio,
-                    this.mousePosition[1] * pixelRatio,
-                    this.state.radius * pixelRatio,
-                    0,
-                    2 * Math.PI
-                );
-                ctx.lineWidth = 5 * pixelRatio;
-                ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-                ctx.stroke();
-            }
-            ctx.clip();
-        }
-    };
-    */
-    /*
-    // Calculate pixel color values at mouse position
-    getMousePixelValues = event => {
-        //console.log('');
-        //console.warn('getPixelValues');
-        //console.log('event', event);
-
-        const {
-            context: ctx,
-            frameState: {pixelRatio}
-        } = event;
-
-        if (this.mousePosition) {
-            const x = this.mousePosition[0] * pixelRatio;
-            const y = this.mousePosition[1] * pixelRatio;
-
-            const imageData = ctx.getImageData(x, y, 1, 1).data;
-
-            const color =
-                'rgb(' +
-                imageData[0] +
-                ',' +
-                imageData[1] +
-                ',' +
-                imageData[2] +
-                ')';
-
-            //console.log('color', color);
-
-            this.setState({color: color});
-        }
-    };
-    */
-
     render() {
         // Construct color code
         const colorCode = `rgb(${this.state.centerColor.r}, ${
@@ -439,23 +325,35 @@ class AppMap extends Component {
         return (
             <MapContainer id="map-container">
                 <Header>
-                    <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
-                    <Title>
-                        <h1>
-                            <span className="white">Aria</span> / Earth<span>
-                                Moog
-                            </span>
-                        </h1>
-                        <h2>
-                            Algorithmically Generated Music for Earth
-                            Observation
-                        </h2>
-                    </Title>
+                    <HeaderLeft>
+                        <img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" />
+                        <Title>
+                            <h1>
+                                <span className="white">Aria</span> / Earth<span
+                                >
+                                    Moog
+                                </span>
+                            </h1>
+                            <h2>
+                                Algorithmically Generated Music for Earth
+                                Observation
+                            </h2>
+                        </Title>
+                    </HeaderLeft>
+                    <HeaderRight>
+                        <DataSource>
+                            <strong>Current Data Source:</strong>
+                            {this.state.currentLayer === START_LAYER.id
+                                ? START_LAYER.title
+                                : this.state.capabilities
+                                    ? getLayerById(
+                                          this.state.currentLayer,
+                                          this.state.capabilities
+                                      )['Title']
+                                    : ''}
+                        </DataSource>
+                    </HeaderRight>
                 </Header>
-                <LayerDropdown
-                    visible={this.state.provider}
-                    handleClick={this.onProviderChange}
-                />
                 <ColorSwatch color={colorCode} />
                 <Graph
                     point={this.state.centerColor}
@@ -471,7 +369,10 @@ class AppMap extends Component {
                         </MapCenterLatLong>
                     )}
                 </Footer>
-                <ProviderPicker capabilities={this.state.capabilities} />
+                <ProviderPicker
+                    capabilities={this.state.capabilities}
+                    handleSelect={this.handleLayerChange}
+                />
             </MapContainer>
         );
     }
