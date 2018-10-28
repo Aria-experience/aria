@@ -1,8 +1,13 @@
+import WMTSCapabilities from 'ol/format/WMTSCapabilities.js';
+import {optionsFromCapabilities} from 'ol/source/WMTS.js';
+
+// App
 import {
     GIBS_BASE_URL,
     GIBS_DEFAULT_SUFFIX,
     XYZ_SUFFIX,
-    DEFAULT_FORMAT_SUFFIX
+    DEFAULT_FORMAT_SUFFIX,
+    GIBS_CAPABILITIES_URL
 } from './constants';
 
 // Creates the data layer url
@@ -18,3 +23,12 @@ export const createDataLayerXYZUrl = (
     `${baseUrl || GIBS_BASE_URL}/${productName}/default/${
         date ? date + '/' : ''
     }${urlSuffix || GIBS_DEFAULT_SUFFIX}/${XYZ_SUFFIX}${fileFormat}`;
+
+// Define the WMTS Capabilities Parser
+const parser = new WMTSCapabilities();
+
+// Get Capabilities from GIBS
+export const fetchGibsCapabilities = () =>
+    fetch(GIBS_CAPABILITIES_URL)
+        .then(response => response.text())
+        .then(text => parser.read(text));
