@@ -34,6 +34,10 @@ export const Header = styled.header`
         margin-top: 20px;
         margin-left: 10px;
     }
+
+    @media only screen and (max-width: 600px) {
+        height: 80px;
+    }
 `;
 
 export const HeaderLeft = styled.div`
@@ -52,6 +56,10 @@ export const HeaderLeft = styled.div`
         img {
             height: ${HEADER_HEIGHT - 30}px;
             width: auto;
+
+            @media only screen and (max-width: 600px) {
+                height: 50px;
+            }
         }
     }
 `;
@@ -74,7 +82,7 @@ export const DataSource = styled.div`
     background-color: white;
     color: black;
 
-    box-shadow: -3px 3px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.5);
 
     white-space: nowrap;
     overflow: hidden;
@@ -145,5 +153,88 @@ export const Swatch = styled.div`
 
     &:hover {
         width: 100px;
+    }
+`;
+
+export const SplashOverlay = styled.div`
+
+    background-color: rgba(0,0,0,0.8);
+    position:absolute;
+    z-index: 9999999999;
+
+    height: 100%;
+    width: 100%;
+
+    top:0;
+    left:0;
+    right:0;
+    bottom:0:
+
+`;
+
+export const SplashContent = styled.div`
+    color: white;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -60%, 0);
+
+    width: 400px;
+    text-align: center;
+
+    @media only screen and (max-width: 400px) {
+        width: 100%;
+    }
+
+    h1 {
+        img {
+            width: 300px;
+            height: auto;
+
+            @media only screen and (max-width: 400px) {
+                width: 200px;
+            }
+        }
+    }
+
+    h2 {
+        color: #f27121;
+        font-weight: 100;
+        padding: 10px;
+    }
+
+    p {
+        text-align: center;
+        max-width: 300px;
+        font-size: 20px;
+        line-height: 1.2;
+        margin: 0 auto;
+        padding: 10px;
+
+        @media only screen and (max-width: 400px) {
+            max-width: 100%;
+        }
+    }
+`;
+
+export const StartButton = styled.button`
+    padding: 10px;
+    width: 300px;
+    outline: none;
+    margin-top: 30px;
+
+    color: white;
+    text-transform: uppercase;
+    background: linear-gradient(to left, #f27121, #e94057, #8a2387);
+    font-size: 30px;
+    border: 0px;
+
+    @media only screen and (max-width: 400px) {
+        width: 90%;
+    }
+
+    &:hover {
+        cursor: pointer;
     }
 `;

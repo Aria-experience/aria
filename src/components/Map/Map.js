@@ -27,7 +27,10 @@ import {
     MapCenterLatLong,
     HeaderRight,
     HeaderLeft,
-    DataSource
+    DataSource,
+    SplashOverlay,
+    SplashContent,
+    StartButton
 } from './Map.styles';
 import ColorSwatch from '../ColorSwatch';
 import ProviderPicker from '../ProviderPicker';
@@ -271,6 +274,8 @@ class AppMap extends Component {
         this.map.addLayer(this.dataLayer);
     };
 
+    toggleSplash = () => this.setState({splash: !this.state.splash});
+
     // Handle Chaning the current map layer
     handleLayerChange = layerId =>
         this.setState({
@@ -290,7 +295,7 @@ class AppMap extends Component {
         this.setCenterColorValues(ctx);
 
         // If center is ready
-        if (this.state.centerPx) {
+        if (this.state.centerPx && !this.state.splash) {
             // Begin drawing the "circle crosshair"
             ctx.beginPath();
 
@@ -325,39 +330,41 @@ class AppMap extends Component {
         }, ${this.state.centerColor.b})`;
         return (
             <MapContainer id="map-container">
-                <Header role="banner">
-                    <HeaderLeft>
-                        <a
-                            href="http://aria.earth"
-                            title="Aria: Earth has a Voice. Take a Listen."
-                        >
-                            <h1>
-                                <img src={AriaLogo} alt="Aria" />
-                            </h1>
-                        </a>
+                {!this.state.splash && (
+                    <Header role="banner">
+                        <HeaderLeft>
+                            <a
+                                href="http://aria.earth"
+                                title="Aria: Earth has a Voice. Take a Listen."
+                            >
+                                <h1>
+                                    <img src={AriaLogo} alt="Aria" />
+                                </h1>
+                            </a>
 
-                        <Subtitles>
-                            <h2>Earth has a Voice. Take a Listen</h2>
-                            <h3>
-                                Algorithmically Generated Music for Earth
-                                Observation
-                            </h3>
-                        </Subtitles>
-                    </HeaderLeft>
-                    <HeaderRight>
-                        <DataSource>
-                            <strong>Current Data Source:</strong>
-                            {this.state.currentLayer === START_LAYER.id
-                                ? START_LAYER.title
-                                : this.state.capabilities
-                                    ? getLayerById(
-                                          this.state.currentLayer,
-                                          this.state.capabilities
-                                      )['Title']
-                                    : ''}
-                        </DataSource>
-                    </HeaderRight>
-                </Header>
+                            <Subtitles>
+                                <h2>Earth has a Voice. Take a Listen</h2>
+                                <h3>
+                                    Algorithmically Generated Music for Earth
+                                    Observation
+                                </h3>
+                            </Subtitles>
+                        </HeaderLeft>
+                        <HeaderRight>
+                            <DataSource>
+                                <strong>Current Data Source:</strong>
+                                {this.state.currentLayer === START_LAYER.id
+                                    ? START_LAYER.title
+                                    : this.state.capabilities
+                                        ? getLayerById(
+                                              this.state.currentLayer,
+                                              this.state.capabilities
+                                          )['Title']
+                                        : ''}
+                            </DataSource>
+                        </HeaderRight>
+                    </Header>
+                )}
                 <ColorSwatch color={colorCode} />
                 <Graph
                     point={this.state.centerColor}
@@ -373,10 +380,30 @@ class AppMap extends Component {
                         </MapCenterLatLong>
                     )}
                 </Footer>
-                <ProviderPicker
-                    capabilities={this.state.capabilities}
-                    handleSelect={this.handleLayerChange}
-                />
+                {!this.state.splash && (
+                    <ProviderPicker
+                        capabilities={this.state.capabilities}
+                        handleSelect={this.handleLayerChange}
+                    />
+                )}
+
+                {this.state.splash && (
+                    <SplashOverlay>
+                        <SplashContent>
+                            <h1>
+                                <img src={AriaLogo} alt="Aria" />
+                            </h1>
+                            <h2>Earth has a Voice. Take a Listen.</h2>
+                            <p>
+                                Aria is a synthesizer that generates music and
+                                sounds from Earth Observation data.
+                            </p>
+                            <StartButton onClick={this.toggleSplash}>
+                                Tap to Begin!
+                            </StartButton>
+                        </SplashContent>
+                    </SplashOverlay>
+                )}
             </MapContainer>
         );
     }
