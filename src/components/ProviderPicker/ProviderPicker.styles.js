@@ -59,7 +59,9 @@ export const ShowHideButton = styled.div`
         position: absolute;
         top: 9px;
         left: -20px;
-        display: ${({open, showTag}) => (!open && showTag ? 'block' : 'none')};
+        display: block;
+        visibility: ${({open, showTag}) =>
+            !open && showTag ? 'visible' : 'hidden'};
         width: 0;
         height: 0;
 
@@ -68,13 +70,22 @@ export const ShowHideButton = styled.div`
 
         border-left: 12px solid #6ab82f;
         z-index: 1;
+        opacity: ${({open, showTag}) => (!open && showTag ? 1 : 0)};
+
+        transition: opacity 0.5s ease-in-out;
     }
 
     &:after {
         position: absolute;
         top: 0;
         left: 0;
-        display: ${({open, showTag}) => (!open && showTag ? 'block' : 'none')};
+        display: block;
+        visibility: ${({open, showTag}) =>
+            !open && showTag ? 'visible' : 'hidden'};
+
+        opacity: ${({open, showTag}) => (!open && showTag ? 1 : 0)};
+
+        transition: opacity 0.5s ease-in-out;
 
         width: 190px;
         content: 'Explore More Datasets!';
